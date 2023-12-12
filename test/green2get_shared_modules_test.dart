@@ -1,14 +1,18 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+import 'package:green2get_shared_modules/modules/test/logic/picsum_photos_instructions.dart';
 import 'package:green2get_shared_modules/modules/test/models/picsum_photos_models.dart';
+import 'package:green2get_shared_modules/modules/test/widgets/picsum_widget.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-
-import 'package:green2get_shared_modules/green2get_shared_modules.dart';
+import 'app/controllers/app_controller.dart';
+import 'app/main_app.dart';
 import 'green2get_shared_modules_test.mocks.dart';
 
 @GenerateMocks([PicsumPhotosInstructions])
+@GenerateNiceMocks([MockSpec<AppController>()])
 void main() {
   testWidgets('Displaying an image from picsum.photos', (widgetTester) async {
     final load = MockPicsumPhotosInstructions();
@@ -62,5 +66,24 @@ void main() {
     final value = await load.getPicsumImageList();
     expect(value, isA<PicsumPhotosItemList>());
     expect(value?.length, 30);
+  });
+
+  testWidgets('Displaying an image from picsum.photos, attaching it to PicsumMixinWidget', (widgetTester) async {
+    final mockApp = MockAppController();
+
+    when(mockApp.getPicsumImageBytes(width: 640, height: 360)).thenAnswer((realInvocation) async {
+      return (await rootBundle.load('example/picsum.photos/640x360.jpeg')).buffer.asUint8List();
+    });
+
+    when(mockApp.onStart).thenReturn(InternalFinalCallback(callback: () {}));
+    when(mockApp.onDelete).thenReturn(InternalFinalCallback(callback: () {}));
+
+    final app = MainApp<MockAppController>(mockController: mockApp);
+
+    await widgetTester.pumpWidget(app);
+    expect(find.byType(SizedBox), findsOneWidget);
+    await widgetTester.pump();
+
+    expect(find.byType(Image), findsOneWidget);
   });
 }
