@@ -1,39 +1,67 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Green2Get Shared Modules
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+แพ็คเกจกลางสำหรับแชร์โมดูลระหว่าแอปในกลุ่ม Green2Get เริ่มต้นจากฟีเจอร์แอปฮีโร่ และเว็บแอปโลมาแอดมิน
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+## โครงสร้างโมดูลสำหรับการจัดการ
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+ออกแบบไว้ให้สอดคล้องกับไลบราลี Getx ที่ใช้ภายในแอปต่างๆ ในกลุ่ม Green2Get โดยใช้โครงสร้างแอปดังต่อไปนี้
 
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
-```dart
-const like = 'sample';
+```
+modules
+    + a_module <ชื่อโมดูล>
+        + controllers
+            + mixins (ส่วนเพิ่มเติมสำหรับคลาส Controller)
+                - a_module_controller_mixin.dart
+        + views
+            + widgets (วิดเจ็ด)
+        + models
+        + services
+middleware
+shared
 ```
 
-## Additional information
+ภายในไฟล์ของแต่ละโมดูล จะเน้นใช้คลาสที่ฟลัตเตอร์เตรียมไว้เป็นหลัก หลีกเลี่ยงการใช้โค้ดจากไลบราลี
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+แต่ละส่วนจะมีรูปแบบโค้ดและหน้าที่ดังต่อไปนี้
+
+### Controllers
+
+ในขณะนี้จะมีแค่โฟลเดอร์ mixins เท่านั้น ซึ่งภายในจะมีไฟล์ mixin(ส่วนเพิ่มเติมสำหรับคลาสต่างๆ) อยู่ ที่เลือกใช้รูปโค้ดแบบนี้ เพราะมันสามารถใช้คู่กับคลาส GetxController ได้ โดยไม่ต้องกังวลเรื่องเวอร์ชันไลบราลีที่แตกต่างกันของแต่ละแอปฯ
+
+- controllers/mixins/a_module_controller_mixin.dart
+
+```dart
+mixin AModuleMixin {
+    /// เมดธอดและตัวแปรใช้ภายในคลาส
+}
+
+```
+
+- การนำไปใช้ใน GetxController
+
+```dart
+class AppController extends GetxController with AModuleMixin {
+    /// Controller นี้สามารถถ่ายทอดและใช้งานเมดธอดของ AModuleMixin ได้
+}
+
+```
+
+### Views
+
+ในขณะนี้ จะมีแค่โฟลเดอร์ widgets เท่านั้น ซึ่งภายในจะมีไฟล์วิดเจ็ดไว้ใช้สำหรับแสดงผลบนแอปฯ
+
+### Models
+
+โฟลเดอร์สำหรับแสดงตัวเป็นโมเดลข้อมูล
+
+### Services
+
+โฟลเดอร์สำหรับแสดงตัวเป็นเซอร์วิสที่ใช้ภายในโมดูล หรืออนุญาตให้แอปฯ ของ Green2Get ยืมใช้คลาสดังกล่าวได้
+
+### Middlewares
+
+โค้ดส่วนกลางที่ทำหน้าเชื่อมต่อกับฟีเจอร์ที่มีการติดต่อระหว่างการทำงานในขอบเขตของเฟรมเวิร์คและระบบปฏิบัติการภายในอุปกรณ์ อาทิ การเชื่อมต่อ API server ของ Green2Get ผ่านระบบเครือข่ายอินเทอร์เน็ต (ไลบราลี dio) หรือการทำรายการ logging ผ่านฟีเจอร์ดังกล่าวในระบบปฏิบัติการ (ไลบราลี logger)
+
+### Shared
+
+โค้ดจิปาถะไว้แชร์ใช้กันในแอปฯ ของ Green2Get อาทิ enums หรือ  utility classesที่ใช้กันภายในแอปฯ เป็นต้น
