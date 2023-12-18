@@ -26,7 +26,7 @@ abstract class JsonList<T> extends Iterable<T> {
   int get length => source.length;
 
   @override
-  Iterator<T> get iterator => _JsonListIterator<T>(source.iterator, deserialize);
+  Iterator<T> get iterator => JsonListIterator<T>(source.iterator, deserialize);
 
   T deserialize(int index, dynamic value) => value;
 
@@ -37,12 +37,12 @@ abstract class JsonList<T> extends Iterable<T> {
   int get hashCode => Object.hash(source, null);
 }
 
-class _JsonListIterator<E> extends Iterator<E> {
+class JsonListIterator<E> extends Iterator<E> {
   final Iterator iterator;
   final E Function(int index, dynamic value) deserialize;
   int _index = 0;
 
-  _JsonListIterator(this.iterator, this.deserialize);
+  JsonListIterator(this.iterator, this.deserialize);
 
   int get index => _index;
 

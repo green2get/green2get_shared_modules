@@ -7,8 +7,8 @@ import 'package:green2get_shared_modules/modules/test/models/picsum_photos_model
 import 'package:green2get_shared_modules/modules/test/widgets/picsum_widget.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'app/controllers/app_controller.dart';
-import 'app/main_app.dart';
+import 'modules/app/controllers/app_controller.dart';
+import 'modules/app/main_app.dart';
 import 'green2get_shared_modules_test.mocks.dart';
 
 @GenerateMocks([PicsumPhotosInstructions])

@@ -17,7 +17,7 @@ import 'package:green2get_shared_modules/modules/test_02/models/picsum_photos_mo
     as _i10;
 import 'package:mockito/mockito.dart' as _i1;
 
-import 'app/controllers/app_controller.dart' as _i7;
+import 'modules/app/controllers/app_controller.dart' as _i7;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values

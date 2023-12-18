@@ -11,6 +11,8 @@ class AppView extends GetView<AppController> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureImage(future: controller.getPicsumImageBytes(width: 640, height: 360).then((value) => MemoryImage(value ?? Uint8List(0))));
+    return FutureImage(
+      future: controller.getPicsumImageBytes(width: 640, height: 360).then((value) => MemoryImage(value ?? Uint8List(0))),
+    );
   }
 }
