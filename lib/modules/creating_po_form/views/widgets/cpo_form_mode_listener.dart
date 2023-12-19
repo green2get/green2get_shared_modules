@@ -7,16 +7,16 @@ import '../../_invocation/symbols.dart';
 import '../creating_po_form_view.dart';
 
 /// วิดเจ็ตที่อัพเดทตามสถานะประเภทการสร้าง PO [CreatingPoFormMixin.type]
-class FormTypeListener extends StatefulWidget {
+class CpoFormTypeListener extends StatefulWidget {
   final Widget Function(BuildContext context, CreatingPoFormType mode) builder;
 
-  const FormTypeListener(this.builder, {super.key});
+  const CpoFormTypeListener(this.builder, {super.key});
 
   @override
   State<StatefulWidget> createState() => _FormTypeListenerState();
 }
 
-class _FormTypeListenerState extends State<FormTypeListener> {
+class _FormTypeListenerState extends State<CpoFormTypeListener> {
   ValueNotifier<CreatingPoFormType>? _listenable;
 
   @override

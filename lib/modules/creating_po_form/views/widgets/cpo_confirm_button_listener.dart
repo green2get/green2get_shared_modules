@@ -1,24 +1,21 @@
 import 'package:flutter/widgets.dart';
 
 import '../../../../shared/_invocation/tokens.dart';
-import '../../models/enums/creating_po_form_checkbox.dart';
+import '../../controllers/mixins/creating_po_form_mixin.dart';
 import '../../_invocation/symbols.dart';
 import '../creating_po_form_view.dart';
 
-/// วิดเจ็ตทีอัพเดทตามสถานะ checkbox ภายในหน้าสร้าง PO
-///
-/// [checkbox] ระบุตาม checkbox ที่ต้องการ
-class CheckboxListener extends StatefulWidget {
-  final CreatingPoFormCheckbox checkbox;
-  final Widget Function(BuildContext context, bool value) builder;
+/// วิดเจ็ตที่อัพเดทตามสถานะปุ่มยืนยัน [CreatingPoFormMixin.confirmButtonEnabled]
+class CpoConfirmButtonListener extends StatefulWidget {
+  final Widget Function(BuildContext context, bool enabled) builder;
 
-  const CheckboxListener(this.checkbox, this.builder, {super.key});
+  const CpoConfirmButtonListener(this.builder, {super.key});
 
   @override
-  State<StatefulWidget> createState() => _CheckboxListenerState();
+  State<StatefulWidget> createState() => _ConfirmButtonListenerState();
 }
 
-class _CheckboxListenerState extends State<CheckboxListener> {
+class _ConfirmButtonListenerState extends State<CpoConfirmButtonListener> {
   ValueNotifier<bool>? _listenable;
 
   @override
@@ -27,7 +24,7 @@ class _CheckboxListenerState extends State<CheckboxListener> {
       _listenable = context
           .dependOnInheritedWidgetOfExactType<InheritedCreatingPoForm>()
           ?.controller
-          .noSuchMethod(Invocation.method(getConfirmButtonEnabledListenable, [invocationToken, widget.checkbox]));
+          .noSuchMethod(Invocation.method(getConfirmButtonEnabledListenable, [invocationToken]));
     } catch (_) {
       _listenable = null;
     }

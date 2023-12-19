@@ -28,7 +28,7 @@ void main() {
   testWidgets('Testing Creating PO widgets.', (widgetTester) async {
     await widgetTester.pumpWidget(app);
 
-    expect(find.byType(FormTypeListener), findsNWidgets(4));
+    expect(find.byType(CpoFormTypeListener), findsNWidgets(4));
     expect(controller.type, CreatingPoFormType.values.first);
 
     for (int i = 0; i < 3; i++) {
@@ -42,7 +42,7 @@ void main() {
 
     for (final e in CreatingPoFormCheckbox.values) {
       await widgetTester.tap(find.descendant(
-        of: find.byWidgetPredicate((widget) => widget is CheckboxListener && widget.checkbox == e),
+        of: find.byWidgetPredicate((widget) => widget is CpoCheckboxListener && widget.checkbox == e),
         matching: find.byType(Checkbox),
       ));
       await widgetTester.pump();
@@ -105,5 +105,12 @@ void main() {
       ..setEndDate(now.add(const Duration(days: 10)));
 
     expect(controller.confirmButtonEnabled, true);
+
+    await widgetTester.pump();
+
+    expect(
+      widgetTester.widget(find.byType(ElevatedButton)),
+      isA<ElevatedButton>().having((button) => button.onPressed != null, 'Confirm button enabled.', true),
+    );
   });
 }
