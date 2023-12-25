@@ -9,15 +9,12 @@ import 'dart:ui' as _i9;
 
 import 'package:get/get.dart' as _i2;
 import 'package:get/get_state_manager/src/simple/list_notifier.dart' as _i8;
-import 'package:green2get_shared_modules/modules/test/logic/picsum_photos_instructions.dart'
-    as _i3;
-import 'package:green2get_shared_modules/modules/test/models/picsum_photos_models.dart'
-    as _i6;
-import 'package:green2get_shared_modules/modules/test_02/models/picsum_photos_models.dart'
-    as _i10;
+import 'package:green2get_shared_modules/modules/__test__/test/logic/picsum_photos_instructions.dart' as _i3;
+import 'package:green2get_shared_modules/modules/__test__/test/models/picsum_photos_models.dart' as _i6;
+import 'package:green2get_shared_modules/modules/__test__/test_02/models/picsum_photos_models.dart' as _i10;
 import 'package:mockito/mockito.dart' as _i1;
 
-import 'modules/app/controllers/app_controller.dart' as _i7;
+import 'modules/__test__/controllers/app_controller.dart' as _i7;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -32,8 +29,7 @@ import 'modules/app/controllers/app_controller.dart' as _i7;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeInternalFinalCallback_0<T> extends _i1.SmartFake
-    implements _i2.InternalFinalCallback<T> {
+class _FakeInternalFinalCallback_0<T> extends _i1.SmartFake implements _i2.InternalFinalCallback<T> {
   _FakeInternalFinalCallback_0(
     Object parent,
     Invocation parentInvocation,
@@ -46,8 +42,7 @@ class _FakeInternalFinalCallback_0<T> extends _i1.SmartFake
 /// A class which mocks [PicsumPhotosInstructions].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockPicsumPhotosInstructions extends _i1.Mock
-    implements _i3.PicsumPhotosInstructions {
+class MockPicsumPhotosInstructions extends _i1.Mock implements _i3.PicsumPhotosInstructions {
   MockPicsumPhotosInstructions() {
     _i1.throwOnMissingStub(this);
   }
@@ -347,7 +342,6 @@ class MockAppController extends _i1.Mock implements _i7.AppController {
           },
         ),
         returnValue: _i4.Future<_i10.PicsumPhotosItemList?>.value(),
-        returnValueForMissingStub:
-            _i4.Future<_i10.PicsumPhotosItemList?>.value(),
+        returnValueForMissingStub: _i4.Future<_i10.PicsumPhotosItemList?>.value(),
       ) as _i4.Future<_i10.PicsumPhotosItemList?>);
 }

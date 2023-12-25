@@ -1,9 +1,4 @@
-import 'package:flutter/widgets.dart';
-
-import '../../../../shared/_invocation/tokens.dart';
-import '../../models/enums/creating_po_form_checkbox.dart';
-import '../../_invocation/symbols.dart';
-import '../creating_po_form_view.dart';
+part of '../../../modules.dart';
 
 /// วิดเจ็ตทีอัพเดทตามสถานะ checkbox ภายในหน้าสร้าง PO
 ///
@@ -23,13 +18,25 @@ class _CheckboxListenerState extends State<CpoCheckboxListener> {
 
   @override
   void didChangeDependencies() {
-    try {
-      _listenable = context
-          .dependOnInheritedWidgetOfExactType<InheritedCreatingPoForm>()
-          ?.controller
-          .noSuchMethod(Invocation.method(getConfirmButtonEnabledListenable, [invocationToken, widget.checkbox]));
-    } catch (_) {
-      _listenable = null;
+    final controller = context.dependOnInheritedWidgetOfExactType<_InheritedCreatingPoForm>()?.controller;
+
+    if (controller is! CreatingPoFormMixin) _listenable = null;
+
+    switch (widget.checkbox) {
+      case CreatingPoFormCheckbox.agreementAccepted:
+        _listenable = controller._agreementAccepted;
+        break;
+      case CreatingPoFormCheckbox.onlyFollowingCustomersAccepted:
+        _listenable = controller._onlyFollowingCustomersAccepted;
+        break;
+      case CreatingPoFormCheckbox.taxPriceIncluded:
+        _listenable = controller._taxPriceIncluded;
+        break;
+      case CreatingPoFormCheckbox.vehiclePictureRequired:
+        _listenable = controller._vehiclePictureRequired;
+        break;
+      case CreatingPoFormCheckbox.weighingSlipRequired:
+        _listenable = controller._weighingSlipRequired;
     }
 
     super.didChangeDependencies();

@@ -9,8 +9,6 @@ dependencies:
   dio: ^5.4.0
   flutter:
     sdk: flutter
-  logger: ^2.0.2+1
-  universal_io: ^2.2.2
   meta: ^1.9.1
   number_text_input_formatter: ^1.0.0+7
 

@@ -2,13 +2,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
-import 'package:green2get_shared_modules/modules/test/logic/picsum_photos_instructions.dart';
-import 'package:green2get_shared_modules/modules/test/models/picsum_photos_models.dart';
-import 'package:green2get_shared_modules/modules/test/widgets/picsum_widget.dart';
+import 'package:green2get_shared_modules/modules/__test__/test/logic/picsum_photos_instructions.dart';
+import 'package:green2get_shared_modules/modules/__test__/test/models/picsum_photos_models.dart';
+import 'package:green2get_shared_modules/modules/__test__/test/widgets/picsum_widget.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'modules/app/controllers/app_controller.dart';
-import 'modules/app/main_app.dart';
+import 'modules/__test__/controllers/app_controller.dart';
+import 'modules/__test__/main_app.dart';
 import 'green2get_shared_modules_test.mocks.dart';
 
 @GenerateMocks([PicsumPhotosInstructions])

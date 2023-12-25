@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:green2get_shared_modules/modules/test_02/views/widgets/future_image_builder.dart';
+import 'package:green2get_shared_modules/modules/__test__/test_02/views/widgets/future_image_builder.dart';
 
 import '../controllers/app_controller.dart';
 

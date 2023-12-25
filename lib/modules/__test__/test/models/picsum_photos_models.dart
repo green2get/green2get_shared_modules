@@ -1,4 +1,4 @@
-import '../../../shared/models/json_models.dart';
+import '../../../../shared/models/json_models.dart';
 
 class PicsumPhotosItemList extends JsonList<PicsumPhotosItem> {
   PicsumPhotosItemList(super.source);

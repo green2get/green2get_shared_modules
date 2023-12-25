@@ -1,15 +1,15 @@
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
-import 'package:meta/meta.dart';
-import 'package:number_text_input_formatter/number_text_input_formatter.dart';
+// import 'package:flutter/services.dart';
+// import 'package:flutter/widgets.dart';
+// import 'package:meta/meta.dart';
+// import 'package:number_text_input_formatter/number_text_input_formatter.dart';
 
-import 'package:green2get_shared_modules/green2get_shared_modules.dart';
+// import 'package:green2get_shared_modules/green2get_shared_modules.dart';
 
-import '../../../../shared/_invocation/tokens.dart';
+// import '../../../../shared/widgets/input_formatters/reactive_text_input_formatter.dart';
+// import '../../../../shared/_invocation/invocation.dart' as invoke;
+// import '../../_invocation/symbols.dart';
 
-import '../../../../shared/widgets/input_formatters/reactive_text_input_formatter.dart';
-import '../../_invocation/symbols.dart';
-import '../../_invocation/tokens.dart';
+part of '../../../modules.dart';
 
 /// Mixin สำหรับเมดธอดและตัวแปรสำหรับหน้าฟอร์มสร้าง PO
 mixin CreatingPoFormMixin {
@@ -215,38 +215,4 @@ mixin CreatingPoFormMixin {
     void Function(dynamic result)? onSuccessful,
     void Function()? onFailed,
   });
-
-  @override
-  noSuchMethod(Invocation invocation) {
-    if (!invocation.isMethod || invocation.positionalArguments.isEmpty || invocation.positionalArguments.first != invocationToken) {
-      return super.noSuchMethod(invocation);
-    }
-
-    switch (invocation.memberName) {
-      case getModeListenable:
-        return _type;
-      case getConfirmButtonEnabledListenable:
-        return _confirmButtonEnabled;
-      case getCheckboxListeneable:
-        if (invocation.positionalArguments.length < 2) return super.noSuchMethod(invocation);
-        switch (invocation.positionalArguments.elementAt(1)) {
-          case CreatingPoFormCheckbox.agreementAccepted:
-            return _agreementAccepted;
-          case CreatingPoFormCheckbox.onlyFollowingCustomersAccepted:
-            return _onlyFollowingCustomersAccepted;
-          case CreatingPoFormCheckbox.taxPriceIncluded:
-            return _taxPriceIncluded;
-          case CreatingPoFormCheckbox.vehiclePictureRequired:
-            return _vehiclePictureRequired;
-          case CreatingPoFormCheckbox.weighingSlipRequired:
-            return _weighingSlipRequired;
-          default:
-            return super.noSuchMethod(invocation);
-        }
-      case getMixinToken:
-        return creatingPoFormMixinToken;
-      default:
-        return super.noSuchMethod(invocation);
-    }
-  }
 }

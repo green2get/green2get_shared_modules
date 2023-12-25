@@ -1,7 +1,4 @@
-import 'package:flutter/widgets.dart';
-
-import '../../../shared/_invocation/tokens.dart';
-import '../_invocation/tokens.dart';
+part of '../../modules.dart';
 
 /// คลาสบนสุดของแบบฟอร์มสร้างรายการ PO
 class CreatingPoForm<C> extends StatelessWidget {
@@ -12,22 +9,17 @@ class CreatingPoForm<C> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    try {
-      final token = controller.noSuchMethod(Invocation.method(getMixinToken, [invocationToken]));
-      if (token != creatingPoFormMixinToken) throw 0;
-    } catch (_) {
-      throw StateError('The controller must be mixed in with [CreatingPoFormMixin].');
-    }
+    if (controller is! CreatingPoFormMixin) throw StateError('The controller must be mixed in with [CreatingPoFormMixin].');
 
-    return InheritedCreatingPoForm(controller: controller, child: child);
+    return _InheritedCreatingPoForm(controller: controller, child: child);
   }
 }
 
-class InheritedCreatingPoForm extends InheritedWidget {
+class _InheritedCreatingPoForm extends InheritedWidget {
   final dynamic controller;
 
-  const InheritedCreatingPoForm({super.key, required super.child, required this.controller});
+  const _InheritedCreatingPoForm({required super.child, required this.controller});
 
   @override
-  bool updateShouldNotify(covariant InheritedWidget oldWidget) => oldWidget is InheritedCreatingPoForm && oldWidget.controller != controller;
+  bool updateShouldNotify(covariant InheritedWidget oldWidget) => oldWidget is _InheritedCreatingPoForm && oldWidget.controller != controller;
 }

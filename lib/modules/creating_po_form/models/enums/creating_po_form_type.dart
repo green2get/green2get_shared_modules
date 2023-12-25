@@ -1,3 +1,5 @@
+part of '../../../modules.dart';
+
 /// ประเภทการับซื้อในหน้าสร้าง PO
 enum CreatingPoFormType {
   /// ขายส่งปกติ

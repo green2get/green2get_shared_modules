@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
-import 'package:green2get_shared_modules/modules/creating_po_form/creating_po_form.dart';
+import 'package:green2get_shared_modules/modules/modules.dart';
 import 'package:mockito/annotations.dart';
 
 import 'controllers/creating_po_form_controller.dart';

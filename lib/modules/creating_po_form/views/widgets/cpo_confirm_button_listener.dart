@@ -1,9 +1,4 @@
-import 'package:flutter/widgets.dart';
-
-import '../../../../shared/_invocation/tokens.dart';
-import '../../controllers/mixins/creating_po_form_mixin.dart';
-import '../../_invocation/symbols.dart';
-import '../creating_po_form_view.dart';
+part of '../../../modules.dart';
 
 /// วิดเจ็ตที่อัพเดทตามสถานะปุ่มยืนยัน [CreatingPoFormMixin.confirmButtonEnabled]
 class CpoConfirmButtonListener extends StatefulWidget {
@@ -20,14 +15,8 @@ class _ConfirmButtonListenerState extends State<CpoConfirmButtonListener> {
 
   @override
   void didChangeDependencies() {
-    try {
-      _listenable = context
-          .dependOnInheritedWidgetOfExactType<InheritedCreatingPoForm>()
-          ?.controller
-          .noSuchMethod(Invocation.method(getConfirmButtonEnabledListenable, [invocationToken]));
-    } catch (_) {
-      _listenable = null;
-    }
+    final controller = context.dependOnInheritedWidgetOfExactType<_InheritedCreatingPoForm>()?.controller;
+    _listenable = controller is CreatingPoFormMixin ? controller._confirmButtonEnabled : null;
 
     super.didChangeDependencies();
   }

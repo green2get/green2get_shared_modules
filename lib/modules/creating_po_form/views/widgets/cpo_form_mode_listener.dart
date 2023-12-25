@@ -1,10 +1,4 @@
-import 'package:flutter/widgets.dart';
-
-import '../../../../shared/_invocation/tokens.dart';
-import '../../controllers/mixins/creating_po_form_mixin.dart';
-import '../../models/enums/creating_po_form_type.dart';
-import '../../_invocation/symbols.dart';
-import '../creating_po_form_view.dart';
+part of '../../../modules.dart';
 
 /// วิดเจ็ตที่อัพเดทตามสถานะประเภทการสร้าง PO [CreatingPoFormMixin.type]
 class CpoFormTypeListener extends StatefulWidget {
@@ -21,15 +15,8 @@ class _FormTypeListenerState extends State<CpoFormTypeListener> {
 
   @override
   void didChangeDependencies() {
-    try {
-      _listenable = context
-          .dependOnInheritedWidgetOfExactType<InheritedCreatingPoForm>()
-          ?.controller
-          .noSuchMethod(Invocation.method(getModeListenable, [invocationToken]));
-    } catch (_) {
-      _listenable = null;
-    }
-
+    final controller = context.dependOnInheritedWidgetOfExactType<_InheritedCreatingPoForm>()?.controller;
+    _listenable = controller is CreatingPoFormMixin ? controller._type : null;
     super.didChangeDependencies();
   }
 

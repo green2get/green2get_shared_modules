@@ -1,3 +1,5 @@
+part of '../../../modules.dart';
+
 /// ใช้สำหรับตรวจสอบ checkbox หน้าสร้าง PO
 enum CreatingPoFormCheckbox {
   /// ราคารวมภาษีสินค้ามูลค่าเพิ่ม
