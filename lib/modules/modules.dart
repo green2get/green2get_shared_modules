@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
@@ -19,3 +21,13 @@ part 'creating_po_form/views/creating_po_form_view.dart';
 
 part 'po_history_board/controllers/mixins/po_history_board_mixin.dart';
 part 'po_history_board/views/po_history_board_view.dart';
+
+// หน้าบอร์ดรับซื้อ PO
+part 'po_board/controllers/mixins/po_board_mixin.dart';
+part 'po_board/views/widgets/pob_items_listener.dart';
+part 'po_board/views/widgets/pob_amount_counter_listener.dart';
+part 'po_board/views/widgets/pob_countdown_timer_listener.dart';
+part 'po_board/views/widgets/pob_item_attached_button_listener.dart';
+part 'po_board/views/widgets/pob_item.dart';
+part 'po_board/views/po_board_view.dart';
+part 'po_board/models/po_board_item_data.dart';
