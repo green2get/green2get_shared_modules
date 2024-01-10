@@ -76,12 +76,16 @@ mixin PoBoardMixin {
 
       if (timer == null) {
         _countdownTimers[e] = ValueNotifier(remaining);
+
+        _itemAttachedButtonsEnabled[e]?.value = applyEachItemAttachedButtonEnabled(e);
         continue;
       }
 
       if (timer.value.inSeconds != diff.inSeconds) {
         timer.value = remaining;
       }
+
+      _itemAttachedButtonsEnabled[e]?.value = applyEachItemAttachedButtonEnabled(e);
     }
 
     _areCountdownTimersRunning = hasPositiveDuration;
