@@ -28,4 +28,7 @@ class CreatingPoFormController extends GetxController with CreatingPoFormMixin {
 
   @override
   String get unit => 'KG';
+
+  @override
+  int get usedCoins => 1;
 }

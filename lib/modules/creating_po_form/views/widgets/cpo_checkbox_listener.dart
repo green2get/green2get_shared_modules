@@ -20,7 +20,11 @@ class _CheckboxListenerState extends State<CpoCheckboxListener> {
   void didChangeDependencies() {
     final controller = context.dependOnInheritedWidgetOfExactType<_InheritedCreatingPoForm>()?.controller;
 
-    if (controller is! CreatingPoFormMixin) _listenable = null;
+    if (controller is! CreatingPoFormMixin) {
+      _listenable = null;
+      super.didChangeDependencies();
+      return;
+    }
 
     switch (widget.checkbox) {
       case CreatingPoFormCheckbox.agreementAccepted:

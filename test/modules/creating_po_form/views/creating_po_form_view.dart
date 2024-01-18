@@ -77,10 +77,10 @@ class CreatingPoFormView extends GetView<CreatingPoFormController> {
                 controller: controller.minimumAmountPerRoundController,
                 inputFormatters: [controller.minimumAmountPerRoundFormatter],
               ),
-              TextField(
-                controller: controller.usedCoinsController,
-                inputFormatters: [controller.usedCoinsFormatter],
-              ),
+              // TextField(
+              //   controller: controller.usedCoinsController,
+              //   inputFormatters: [controller.usedCoinsFormatter],
+              // ),
               TextField(
                 controller: controller.pricePerUnitController,
                 inputFormatters: [controller.pricePerUnitFormatter],

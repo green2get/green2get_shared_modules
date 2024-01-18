@@ -61,7 +61,7 @@ void main() {
           expect(controller.weighingSlipRequired, true);
           break;
         case CreatingPoFormCheckbox.agreementAccepted:
-          expect(controller.aggreementAccepted, true);
+          expect(controller.agreementAccepted, true);
           break;
       }
     }
@@ -74,10 +74,10 @@ void main() {
     await widgetTester.pump();
     expect(controller.totalAcceptedAmount, lessThanOrEqualTo(controller.maximumTotalAcceptedAmount));
 
-    await widgetTester.enterText(
-      find.byWidgetPredicate((element) => element is TextField && element.controller == controller.usedCoinsController),
-      '100',
-    );
+    // await widgetTester.enterText(
+    //   find.byWidgetPredicate((element) => element is TextField && element.controller == controller.usedCoinsController),
+    //   '100',
+    // );
 
     await widgetTester.pump();
     expect(controller.usedCoins, lessThanOrEqualTo(controller.remainingCoins));

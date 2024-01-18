@@ -1,21 +1,7 @@
-// import 'package:flutter/services.dart';
-// import 'package:flutter/widgets.dart';
-// import 'package:meta/meta.dart';
-// import 'package:number_text_input_formatter/number_text_input_formatter.dart';
-
-// import 'package:green2get_shared_modules/green2get_shared_modules.dart';
-
-// import '../../../../shared/widgets/input_formatters/reactive_text_input_formatter.dart';
-// import '../../../../shared/_invocation/invocation.dart' as invoke;
-// import '../../_invocation/symbols.dart';
-
 part of '../../../modules.dart';
 
 /// Mixin สำหรับเมดธอดและตัวแปรสำหรับหน้าฟอร์มสร้าง PO
 mixin CreatingPoFormMixin {
-  DateTime? _startDate;
-  DateTime? _endDate;
-
   final _type = ValueNotifier(CreatingPoFormType.values.first);
   final _confirmButtonEnabled = ValueNotifier(false);
   final _taxPriceIncluded = ValueNotifier(false);
@@ -23,29 +9,29 @@ mixin CreatingPoFormMixin {
   final _weighingSlipRequired = ValueNotifier(false);
   final _onlyFollowingCustomersAccepted = ValueNotifier(false);
   final _agreementAccepted = ValueNotifier(false);
-  final _totalAcceptedAmount = TextEditingController();
-  final _minimumAmountPerRound = TextEditingController();
-  final _pricePerUnit = TextEditingController();
-  final _usedCoins = TextEditingController();
-  final _details = TextEditingController();
+  late final _totalAcceptedAmount = TextEditingController()..addListener(_onTotalAcceptedAmountChanged);
+  late final _minimumAmountPerRound = TextEditingController()..addListener(_onTextEditingControllerChanged);
+  late final _pricePerUnit = TextEditingController()..addListener(_onTextEditingControllerChanged);
+  late final _details = TextEditingController()..addListener(_onTextEditingControllerChanged);
+  final _startDate = ValueNotifier<DateTime?>(null);
+  final _endDate = ValueNotifier<DateTime?>(null);
+  final _numberInputFormatter = NumberTextInputFormatter(groupDigits: 3);
+  final _materials = ValueNotifier<Iterable<CpoMaterialItem>?>(null);
+  final _selectedMaterial = ValueNotifier<CpoMaterialItem?>(null);
 
   /// เหรียญคงเหลือ
-  @mustBeOverridden
   int get remainingCoins;
 
-  /// ปริมาณรับซื้อโดยรวมทั้งหมดสูงสุด
-  @mustBeOverridden
+  /// ปริมาณรับซื้อโดยรวมทั้งหมดสูงสุดที่ระบบอนุญาตให้ป้อน
   double get maximumTotalAcceptedAmount;
 
   /// ราคารับรองต่อหน่วยสูงสุด
-  @mustBeOverridden
   double get maximumPricePerUnit;
 
   /// หน่วยของวัสดุรับซื้อ
-  @mustBeOverridden
   String get unit;
 
-  /// ประเภทการับซื้อ
+  /// ประเภทการรับซื้อ
   CreatingPoFormType get type => _type.value;
 
   /// ปุ่มยืนยันรายการ
@@ -64,13 +50,13 @@ mixin CreatingPoFormMixin {
   bool get onlyFollowingCustomersAccepted => _onlyFollowingCustomersAccepted.value;
 
   /// ยอมรับข้อตกลงการใช้บริการ
-  bool get aggreementAccepted => _agreementAccepted.value;
+  bool get agreementAccepted => _agreementAccepted.value;
 
   /// วันเริ่มต้น
-  DateTime? get startDate => _startDate;
+  DateTime? get startDate => _startDate.value;
 
   /// วันสิ้นสุด
-  DateTime? get endDate => _endDate;
+  DateTime? get endDate => _endDate.value;
 
   /// ปริมาณรวม
   double? get totalAcceptedAmount => double.tryParse(_totalAcceptedAmount.text.replaceAll(',', ''));
@@ -82,10 +68,16 @@ mixin CreatingPoFormMixin {
   double? get pricePerUnit => double.tryParse(_pricePerUnit.text.replaceAll(',', ''));
 
   /// เหรียญที่ใช้
-  int? get usedCoins => int.tryParse(_usedCoins.text.replaceAll(',', ''));
+  int get usedCoins;
 
   /// รายละเอียด
   String get details => _details.text;
+
+  /// รายการวัสดุที่เลือกไว้
+  CpoMaterialItem? get selectedMaterial => _selectedMaterial.value;
+
+  /// รายการวัสดุที่สามารถเลือกได้
+  Iterable<CpoMaterialItem>? get materialList => _materials.value;
 
   /// [TextEditingController] ของปริมาณรวม
   TextEditingController get totalAcceptedAmountController => _totalAcceptedAmount;
@@ -95,9 +87,6 @@ mixin CreatingPoFormMixin {
 
   /// [TextEditingController] ของราคาประกันขั้นต่ำ
   TextEditingController get pricePerUnitController => _pricePerUnit;
-
-  /// [TextEditingController] ของเหรียญที่ใช้
-  TextEditingController get usedCoinsController => _usedCoins;
 
   /// [TextEditingController] ของรายละเอียด
   TextEditingController get detailsController => _details;
@@ -111,16 +100,23 @@ mixin CreatingPoFormMixin {
   /// [TextInputFormatter] ของปริมาณรับโดยรวม
   TextInputFormatter get totalAcceptedAmountFormatter {
     final max = maximumTotalAcceptedAmount;
+
     return NumberTextInputFormatter(maxValue: max.isFinite && max >= 0 ? '$max' : null, groupDigits: 3);
   }
 
   /// [TextInputFormatter] ของปริมาณรับขั้นต่ำต่อครั้ง
   TextInputFormatter get minimumAmountPerRoundFormatter {
-    return ReactiveTextInputFormatter(() {
+    return ReactiveTextInputFormatter((oldValue, newValue) {
       final max = totalAcceptedAmount;
-      return NumberTextInputFormatter(
-        maxValue: max != null && max.isFinite && max >= 0 ? '$max' : null,
-        groupDigits: 3,
+      final minimumAmountPerRoundValue = double.tryParse(newValue.text);
+
+      return _numberInputFormatter.formatEditUpdate(
+        oldValue,
+        newValue.copyWith(
+          text: max != null && max.isFinite && max >= 0 && minimumAmountPerRoundValue != null && minimumAmountPerRoundValue.isFinite
+              ? '${minimumAmountPerRoundValue.clamp(0, max)}'
+              : newValue.text,
+        ),
       );
     });
   }
@@ -143,74 +139,122 @@ mixin CreatingPoFormMixin {
     _totalAcceptedAmount.dispose();
     _minimumAmountPerRound.dispose();
     _pricePerUnit.dispose();
-    _usedCoins.dispose();
+    // _usedCoins.dispose();
     _details.dispose();
   }
 
+  /// เปลี่ยนประเภทการรับส่ง
   void setType(CreatingPoFormType type) {
     _type.value = type;
-    _checkConfirmButtonStatus();
   }
 
+  /// สลับสถานะการยอมรับการใช้บริการ
   void toggleAgreementAccepted() {
     _agreementAccepted.value = !_agreementAccepted.value;
-    _checkConfirmButtonStatus();
+    refreshConfirmButton();
   }
 
+  /// สลับสถานะการอนุญาตให้แสดงรายการแค่ผู้ที่ติดตามเท่านั้น
   void toggleOnlyFollowingCustomersAccepted() {
     _onlyFollowingCustomersAccepted.value = !_onlyFollowingCustomersAccepted.value;
-    _checkConfirmButtonStatus();
+    refreshConfirmButton();
   }
 
+  /// สลับสถานะความต้องการใบชั่งน้ำหนักเป็นหลักฐานการรับซื้อ
   void toggleWeighingSlipRequired() {
     _weighingSlipRequired.value = !_weighingSlipRequired.value;
-    _checkConfirmButtonStatus();
+    refreshConfirmButton();
   }
 
+  /// สลับสถานะความต้องการรูปภาพพาหนะพร้อมวัสดุเป็นหลักฐานการรับซื้อ
   void toggleVehiclePictureRequired() {
     _vehiclePictureRequired.value = !_vehiclePictureRequired.value;
-    _checkConfirmButtonStatus();
+    refreshConfirmButton();
   }
 
+  /// สลับสถานะราคารับซื้อที่มีการคำนวนภาษีมูลค่าแล้ว
   void toggleTaxPriceIncluded() {
     _taxPriceIncluded.value = !_taxPriceIncluded.value;
-    _checkConfirmButtonStatus();
+    refreshConfirmButton();
   }
 
+  /// ปรับวันที่เริ่มต้นรายการ
   void setStartDate(DateTime date) {
-    _startDate = date;
-    _checkConfirmButtonStatus();
+    _startDate.value = date;
+    refreshConfirmButton();
   }
 
+  /// ปรับวันที่สิ้นสุดรายการ
   void setEndDate(DateTime date) {
-    _endDate = date;
-    _checkConfirmButtonStatus();
+    _endDate.value = date;
+    refreshConfirmButton();
   }
 
-  void _checkConfirmButtonStatus() {
-    final startDate = _startDate,
-        endDate = _endDate,
-        totalAcceptedAmount = this.totalAcceptedAmount,
-        minimumAmountPerRound = this.minimumAmountPerRound,
-        pricePerUnit = this.pricePerUnit,
-        usedCoins = this.usedCoins;
+  void _onTotalAcceptedAmountChanged() {
+    final totalAmount = totalAcceptedAmount;
+    final minimumAmount = minimumAmountPerRound;
 
-    _confirmButtonEnabled.value = totalAcceptedAmount != null &&
-        totalAcceptedAmount > 0 &&
-        minimumAmountPerRound != null &&
-        minimumAmountPerRound > 0 &&
-        pricePerUnit != null &&
-        pricePerUnit > 0 &&
-        usedCoins != null &&
-        usedCoins >= 0 &&
-        startDate != null &&
-        endDate != null &&
-        endDate.isAfter(startDate) &&
-        _agreementAccepted.value;
+    if (totalAmount == null || (minimumAmount != null && minimumAmount > totalAmount)) {
+      _minimumAmountPerRound.value = _totalAcceptedAmount.value.copyWith();
+    }
+
+    refreshConfirmButton();
   }
+
+  void _onTextEditingControllerChanged() {
+    refreshConfirmButton();
+  }
+
+  /// แทนที่รายการวัสดุถที่สามารถเลือกได้
+  void replaceMaterialList(Iterable<CpoMaterialItem> list) => _materials.value = list;
+
+  /// เลือกวัสดุที่ต้องการรับ
+  void selectMaterialItem(CpoMaterialItem item) {
+    _selectedMaterial.value = item;
+    refreshConfirmButton();
+  }
+
+  /// เมธอดสำหรับตรวจสอบข้อมูลยืนยันรายการและปรับสถานะปุ่มยืนยัน
+  bool applyConfirmButtonStatus(
+    DateTime? startDate,
+    DateTime? endDate,
+    double? totalAcceptedAmount,
+    double? minimumAmountPerRound,
+    double? pricePerUnit,
+    int usedCoins,
+    bool agreementAccepted,
+  ) =>
+      totalAcceptedAmount != null &&
+      totalAcceptedAmount > 0 &&
+      minimumAmountPerRound != null &&
+      minimumAmountPerRound > 0 &&
+      pricePerUnit != null &&
+      pricePerUnit > 0 &&
+      usedCoins >= 0 &&
+      usedCoins <= remainingCoins &&
+      startDate != null &&
+      endDate != null &&
+      endDate.isAfter(startDate) &&
+      agreementAccepted;
+
+  /// บังคับให้ปุ่มยืนยันไม่สามารถใช้งานได้
+  void disableConfirmButton() => _confirmButtonEnabled.value = false;
+
+  /// บังคับให้ปุ่มยืนยันสามารถใช้งานได้
+  void enableConfirmButton() => _confirmButtonEnabled.value = true;
+
+  /// บังคับให้ปุ่มยืนยันให้ตรงตามสถานะ [applyConfirmButtonStatus]
+  void refreshConfirmButton() => _confirmButtonEnabled.value = applyConfirmButtonStatus(
+        _startDate.value,
+        _endDate.value,
+        totalAcceptedAmount,
+        minimumAmountPerRound,
+        pricePerUnit,
+        usedCoins,
+        _agreementAccepted.value,
+      );
 
   /// ยืนยันรายการ PO
-  @mustBeOverridden
   Future submit({
     void Function(dynamic result)? onSuccessful,
     void Function()? onFailed,

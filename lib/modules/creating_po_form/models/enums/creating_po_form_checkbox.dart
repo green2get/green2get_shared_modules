@@ -1,6 +1,6 @@
 part of '../../../modules.dart';
 
-/// ใช้สำหรับตรวจสอบ checkbox หน้าสร้าง PO
+/// ใช้สำหรับตรวจสอบ checkbox หน้าสร้าง PO ร่วมกับวิดเจ็ด [CpoCheckboxListener]
 enum CreatingPoFormCheckbox {
   /// ราคารวมภาษีสินค้ามูลค่าเพิ่ม
   taxPriceIncluded,
