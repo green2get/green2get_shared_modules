@@ -38,6 +38,9 @@ abstract class PoBoardItemData {
   /// หน่วยของวัสดุรับส่ง
   String get unit;
 
+  /// ไอดีของวัสดุรับส่ง
+  int get materialId;
+
   @override
   bool operator ==(Object other) => other is PoBoardItemData && other.id == id;
 
